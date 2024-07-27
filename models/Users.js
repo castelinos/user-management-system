@@ -17,11 +17,14 @@ class User {
           return reject(err);
         }
         connection.query('SELECT u.*, GROUP_CONCAT(ug.groupname) AS groupnames FROM user u LEFT JOIN usergroup ug ON u.username = ug.username GROUP BY u.username', (err, results) => {
-          connection.release();
           if (err) {
             console.error('Error executing query:', err);
             return reject(err);
           }
+          dbpool.releaseConnection(connection);
+          connection.release();
+
+          console.log(results);
           results.forEach(user => {
             if (user.groupnames) {
               user.groupnames = user.groupnames.split(',');
@@ -49,6 +52,8 @@ class User {
         const values = [username.toLowerCase(), email, hashedPassword, disabled];
 
         connection.query(sql, values, (err, results) => {
+          /* Release connection this way */
+          dbpool.releaseConnection(connection);
           connection.release();
 
           if (err) {
@@ -78,7 +83,10 @@ class User {
         console.log(username);
 
         connection.query(sql, values, (err, results) => {
+          /* Release connection this way */
+          dbpool.releaseConnection(connection);
           connection.release();
+
           if (err) {
             console.error('Error executing query:', err);
             return reject(err);
@@ -108,7 +116,10 @@ class User {
         const values = [email, username.toLowerCase()];
 
         connection.query(sql, values, (err, result) => {
+          /* Release connection this way */
+          dbpool.releaseConnection(connection);
           connection.release();
+
           if (err) {
             console.error('Error updating email:', err);
             return reject(err);
@@ -145,6 +156,8 @@ class User {
           }
 
           connection.query(sql, values, (err, result) => {
+            /* Release connection this way */
+            dbpool.releaseConnection(connection);
             connection.release();
             if (err) {
               console.error('Error updating password:', err);
@@ -184,7 +197,10 @@ class User {
           values.push(this.username);
 
           connection.query(sql, values, (err, results) => {
+            /* Release connection this way */
+            dbpool.releaseConnection(connection);
             connection.release();
+
             if (err) {
               console.error('Error executing query:', err);
               return reject(err);

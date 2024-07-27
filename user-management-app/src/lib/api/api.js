@@ -19,7 +19,9 @@ export async function createUserApi(user) {
 export async function updateUserApi(user) {
   try {
     const url = `http://localhost:5000/api/user/adminUpdateUser`;
-    const response = await axios.post(url, user, {
+
+    // Remember to add correct api methods
+    const response = await axios.put(url, user, {
       withCredentials: true, 
       headers: {
         'Content-Type': 'application/json',

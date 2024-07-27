@@ -25,9 +25,8 @@
   async function logout() {
     try {
       const url = 'http://localhost:5000/api/auth/logout';
-      const response = await axios.post(url, {
+      const response = await axios.post(url,{}, {
           withCredentials: true, 
-          credentials: 'include',
           headers: {
             'Content-Type': 'application/json'
           }
