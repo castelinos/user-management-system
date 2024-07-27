@@ -14,7 +14,11 @@ class Group {
           return reject(err);
         }
         connection.query(`SELECT DISTINCT groupname FROM usergroup WHERE groupname IS NOT NULL AND groupname != ''`, (err, results) => {
+          
+          /* Release connection this way */
+          dbpool.releaseConnection(connection);
           connection.release();
+          
           if (err) {
             console.error('Error executing query:', err);
             return reject(err);
@@ -36,7 +40,10 @@ class Group {
         const values = [groupname.toLowerCase()];
 
         connection.query(sql, values, (err, results) => {
+          /* Release connection this way */
+          dbpool.releaseConnection(connection);
           connection.release();
+
           console.log('result save')
           console.log(results)
           if (err) {
@@ -62,7 +69,11 @@ class Group {
         console.log(username);
 
         connection.query(sql, values, (err, results) => {
+
+          /* Release connection this way */
+          dbpool.releaseConnection(connection);
           connection.release();
+
           if (err) {
             console.error('Error executing query:', err);
             return reject(err);
@@ -104,7 +115,11 @@ class Group {
           const insertValues = [groupname.toLowerCase(), username.toLowerCase()];
 
           connection.query(insertSql, insertValues, (err, results) => {
-            connection.release();
+
+          /* Release connection this way */
+          dbpool.releaseConnection(connection);
+          connection.release();
+
             if (err) {
               return reject(err);
             }
@@ -126,8 +141,12 @@ class Group {
         const values = [groupname.toLowerCase(), username.toLowerCase()];
 
         connection.query(sql, values, (err, results) => {
+
+          /* Release connection this way */
+          dbpool.releaseConnection(connection);
+          connection.release();
           if (err) {
-            connection.release();
+            //connection.release();
             return reject(err);
           }
           console.log(results);
@@ -148,8 +167,11 @@ class Group {
         const values = [groupname.toLowerCase(), username.toLowerCase()];
 
         connection.query(sql, values, (err, results) => {
+          /* Release connection this way */
+          dbpool.releaseConnection(connection);
+          connection.release();
           if (err) {
-            connection.release();
+            //connection.release();
             return reject(err);
           }
           return resolve(results)
